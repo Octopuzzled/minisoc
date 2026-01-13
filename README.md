@@ -3,6 +3,9 @@
 A small, portfolio-friendly log collection and analysis platform (SIEM-inspired).
 Goal: collect system events from endpoints, send to a server, store, and visualize.
 
+## Status
+This project is under active development. Current focus: architecture + MVP ingestion pipeline.
+
 ## Scope (MVP)
 - Agent: reads Windows Event Logs and sends structured events
 - Server: REST API to ingest events + persistence
@@ -37,6 +40,12 @@ See `docs/setup/dev-environment.md`.
 - Decisions: `docs/decisions/`
 - Setup: `docs/setup/`
 - Diagrams: `docs/diagrams/`
+
+## Roadmap
+- Milestones and high-level backlog: `docs/backlog.md`
+- Architecture diagram: `docs/diagrams/architecture.md`
+- Event schema: `docs/event-schema-v0.1.md`
+- API contract: `docs/api-contract-v0.1.md`
 
 ## License
 TBD
