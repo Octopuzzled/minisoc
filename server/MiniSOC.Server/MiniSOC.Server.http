@@ -1,0 +1,6 @@
+@MiniSOC.Server_HostAddress = http://localhost:5152
+
+GET {{MiniSOC.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
