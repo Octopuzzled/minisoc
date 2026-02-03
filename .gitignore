@@ -11,6 +11,11 @@ Thumbs.db
 .env
 .env.*
 
+# Microsoft package installers
+*.deb
+*.rpm
+*.msi
+
 # Build artifacts / temp
 bin/
 obj/
