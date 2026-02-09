@@ -1,7 +1,7 @@
 # Development Environment
 
 ## Current development OS
-- Linux (Pop!_OS)
+- Linux (Ubuntu)
 
 ## Target runtime
 - Agent runs on Windows
