@@ -4,7 +4,20 @@ A small, portfolio-friendly log collection and analysis platform (SIEM-inspired)
 Goal: collect system events from endpoints, send to a server, store, and visualize.
 
 ## Status
-This project is under active development. Current focus: architecture + MVP ingestion pipeline.
+This project is under active development.
+
+**Currently implemented:**
+- ✅ Server: REST API with /health and /ingest endpoints (in-memory storage)
+- ✅ Event schema v0.1 defined
+- ✅ API contract v0.1 defined
+
+**In progress:**
+- ⏳ Agent: implementation pending (lost during system reinstall, will be rebuilt)
+
+**Planned:**
+- ⏳ Database persistence
+- ⏳ Query endpoints
+- ⏳ Web UI
 
 ## Scope (MVP)
 - Agent: reads Windows Event Logs and sends structured events
