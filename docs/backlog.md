@@ -1,18 +1,19 @@
 # Backlog (high level)
 
 ## Milestone 1: Architecture & interfaces
-- [ ] Define event JSON schema (minimal)
-- [ ] Define agent -> server API contract (endpoint, auth later)
-- [ ] Draw a simple architecture diagram (text or mermaid)
+- [x] Define event JSON schema (minimal)  ← checkboxen aktualisieren
+- [x] Define agent -> server API contract
+- [x] Draw architecture diagram
 
 ## Milestone 2: Agent reads logs (local)
-- [ ] Prototype: read Windows Event Logs (on Windows later)
-- [ ] Implement agent core pipeline (collect -> normalize -> output JSON)
+- [x] Prototype: DummyEventSource (development)
+- [x] Implement agent core pipeline (collect -> normalize -> output JSON)
+- [ ] Read Windows Event Logs (deferred to Windows phase)
 
 ## Milestone 3: Transport
-- [ ] Server skeleton (health endpoint)
-- [ ] Ingest endpoint accepts JSON events
-- [ ] Agent sends events via HTTP POST
+- [x] Server skeleton (health endpoint)
+- [x] Ingest endpoint accepts JSON events
+- [x] Agent sends events via HTTP POST
 
 ## Milestone 4: Persistence
 - [ ] Choose DB + schema

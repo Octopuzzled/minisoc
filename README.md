@@ -4,20 +4,24 @@ A small, portfolio-friendly log collection and analysis platform (SIEM-inspired)
 Goal: collect system events from endpoints, send to a server, store, and visualize.
 
 ## Status
-This project is under active development.
+MVP complete! Agent collects and sends events to server via HTTP.
 
 **Currently implemented:**
+- ✅ Agent: Event collection with pluggable sources (DummyEventSource for development)
+- ✅ Agent: HTTP transmission to server (/ingest endpoint)
 - ✅ Server: REST API with /health and /ingest endpoints (in-memory storage)
-- ✅ Event schema v0.1 defined
-- ✅ API contract v0.1 defined
+- ✅ Event schema v0.1 defined and implemented
+- ✅ API contract v0.1 defined and implemented
+- ✅ Helper scripts for easy development
 
-**In progress:**
-- ⏳ Agent: implementation pending (lost during system reinstall, will be rebuilt)
+**Next up (Milestone 4):**
+- ⏳ Database persistence (SQLite or PostgreSQL)
+- ⏳ Query endpoints (filter by time, severity, host)
 
 **Planned:**
-- ⏳ Database persistence
-- ⏳ Query endpoints
-- ⏳ Web UI
+- ⏳ Advanced filters & metrics endpoints (Milestone 5)
+- ⏳ Windows Event Log integration (Milestone 2 - Windows phase)
+- ⏳ Web UI (Milestone 6)
 
 ## Scope (MVP)
 - Agent: reads Windows Event Logs and sends structured events
@@ -33,11 +37,11 @@ This project is under active development.
 ## Architecture (high level)
 Agent (Windows) -> HTTP -> Server API -> Database -> Web UI
 
-## Tech (planned)
-- Agent: C# (.NET)
-- Server: TBD (will be decided in docs/decisions)
-- Database: TBD
-- UI: TBD
+## Tech Stack
+- Agent: C# (.NET 8, Console Application)
+- Server: ASP.NET Core 8 (Minimal APIs)
+- Database: TBD (Milestone 4)
+- UI: TBD (Milestone 6)
 
 ## Repository structure
 - `agent/`   Windows agent (C#)
@@ -49,7 +53,17 @@ Agent (Windows) -> HTTP -> Server API -> Database -> Web UI
 ## Getting started
 See `docs/setup/dev-environment.md`.
 
+**Quick start:**
+```bash
+# Terminal 1 - Start server
+./scripts/start-server.sh
+
+# Terminal 2 - Start agent
+./scripts/start-agent.sh
+```
+
 ## Documentation
+- Component READMEs: `agent/README.md`, `server/README.md`
 - Decisions: `docs/decisions/`
 - Setup: `docs/setup/`
 - Diagrams: `docs/diagrams/`
