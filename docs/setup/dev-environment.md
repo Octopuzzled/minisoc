@@ -14,3 +14,9 @@
 ## Notes
 - We develop most components on Linux.
 - Windows-specific parts are isolated in `agent/`.
+
+## Quick Start
+
+For detailed setup instructions, see:
+- Server: `server/README.md`
+- Agent: `agent/README.md`
