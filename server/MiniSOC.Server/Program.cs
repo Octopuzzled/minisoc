@@ -11,11 +11,17 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Register EventStorageService as Singleton
 builder.Services.AddSingleton<IEventStorageService, EventStorageService>();
+builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
 
 var app = builder.Build();
+
+// Initialize db
+using (var scope = app.Services.CreateScope())
+{
+    var dbService = scope.ServiceProvider.GetRequiredService<IDatabaseService>();
+    dbService.Initialize();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

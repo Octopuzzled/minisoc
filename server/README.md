@@ -5,8 +5,10 @@ REST API for the MiniSOC log collection platform.
 ## Status
 - ✅ Health check endpoint implemented
 - ✅ Event ingestion endpoint implemented (in-memory storage)
+- ✅ SQLite database setup and schema creation
+- ⏳ Event persistence (INSERT) - Issue #11
+- ⏳ Event retrieval (SELECT) - Issue #12
 - ⏳ Query endpoints (planned)
-- ⏳ Persistence layer (planned)
 
 ## Quick Start
 
@@ -149,24 +151,30 @@ dotnet test
 ```
 server/
 ├── MiniSOC.Server/
-│   ├── Program.cs              # Application entry point
-│   ├── Endpoints/              # API endpoint definitions
+│   ├── Program.cs                    # Application entry point & DI configuration
+│   ├── appsettings.json              # Configuration (connection strings)
+│   ├── Endpoints/                    # API endpoint definitions
 │   │   ├── HealthEndpoints.cs
 │   │   └── IngestEndpoints.cs
-│   ├── Models/                 # Request/response models
+│   ├── Models/                       # Request/response models
 │   │   ├── Event.cs
 │   │   ├── EventLevel.cs
 │   │   ├── HealthResponse.cs
 │   │   └── IngestResponse.cs
-│   └── Services/               # Business logic
-│       └── EventStorageService.cs
-└── MiniSOC.Server.Tests/       # Integration tests
+│   └── Services/                     # Business logic & data access
+│       ├── IEventStorageService.cs   # In-memory storage interface
+│       ├── EventStorageService.cs    # In-memory storage implementation
+│       ├── IDatabaseService.cs       # Database interface
+│       └── SqliteDatabaseService.cs  # SQLite implementation
+└── MiniSOC.Server.Tests/             # Integration tests
     ├── HealthEndpointTests.cs
-    └── IngestEndpointTests.cs
+    ├── IngestEndpointTests.cs
+    └── DatabaseServiceTests.cs
 ```
 
 ## Technology Stack
 - ASP.NET Core 8 (Minimal APIs)
+- SQLite (Database) with Microsoft.Data.Sqlite
 - xUnit (Testing)
 - Swagger/OpenAPI (Documentation)
 
@@ -174,8 +182,13 @@ server/
 Events follow schema v0.1 as defined in `docs/event-schema-v0.1.md`.
 
 ## Storage
-Currently uses in-memory storage (ConcurrentDictionary). Events are lost on server restart.
-Persistence layer will be added in a future milestone.
+- **Database:** SQLite (`events.db`)
+- **Location:** Same directory as server executable
+- **Schema:** See ADR 0005 for database design decisions
+- **Initialization:** Database and table created automatically on first startup
+
+Note: In-memory storage (`EventStorageService`) is still active for backward compatibility. 
+Migration to SQLite-only storage will happen in Issue #13.
 
 ## Next Steps
 See `docs/backlog.md` for planned features.
