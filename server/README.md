@@ -4,11 +4,11 @@ REST API for the MiniSOC log collection platform.
 
 ## Status
 - ✅ Health check endpoint implemented
-- ✅ Event ingestion endpoint implemented (in-memory storage)
+- ✅ Event ingestion endpoint implemented
 - ✅ SQLite database setup and schema creation
-- ⏳ Event persistence (INSERT) - Issue #11
+- ✅ Event persistence (INSERT to database)
 - ⏳ Event retrieval (SELECT) - Issue #12
-- ⏳ Query endpoints (planned)
+- ⏳ Migration to SQLite-only storage - Issue #13
 
 ## Quick Start
 
@@ -181,14 +181,17 @@ server/
 ## Event Schema
 Events follow schema v0.1 as defined in `docs/event-schema-v0.1.md`.
 
-## Storage
+### Storage
 - **Database:** SQLite (`events.db`)
 - **Location:** Same directory as server executable
 - **Schema:** See ADR 0005 for database design decisions
 - **Initialization:** Database and table created automatically on first startup
+- **Persistence:** Events are saved to database via POST /ingest
 
-Note: In-memory storage (`EventStorageService`) is still active for backward compatibility. 
-Migration to SQLite-only storage will happen in Issue #13.
+### Current State
+Events are now persisted to SQLite database. The in-memory storage (`EventStorageService`) 
+is still active alongside SQLite for backward compatibility. 
+Full migration to SQLite-only storage will happen in Issue #13.
 
 ## Next Steps
 See `docs/backlog.md` for planned features.
