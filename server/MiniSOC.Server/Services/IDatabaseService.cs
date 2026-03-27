@@ -14,4 +14,11 @@ public interface IDatabaseService
     List<Event> GetAllEvents();
 
     int GetEventCount();
+
+    List<Event> GetEvents(
+    string? startTime = null,
+    string? endTime = null,
+    EventLevel? level = null,
+    string? host = null
+);
 }

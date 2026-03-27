@@ -166,4 +166,71 @@ public class EventRetrievalTests
         // Cleanup: Remove test database
         File.Delete(testDbPath);
     }
+
+    [Fact]
+    public void GetEvents_WithFilters_ReturnsFilteredEvents()
+    {
+        // Arrange: Create test database with diverse events
+        var testDbPath = "test_filters.db";
+        if (File.Exists(testDbPath))
+            File.Delete(testDbPath);
+        
+        var config = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["ConnectionStrings:EventsDatabase"] = $"Data Source={testDbPath}"
+            })
+            .Build();
+
+        var dbService = new SqliteDatabaseService(config);
+        dbService.Initialize();
+
+        // Add events with different timestamps, levels, and hosts
+        dbService.AddEvent(new Event
+        {
+            Timestamp = "2026-03-18T09:00:00Z",
+            Host = "PC-1",
+            Source = "Test",
+            Level = EventLevel.Error
+        });
+
+        dbService.AddEvent(new Event
+        {
+            Timestamp = "2026-03-18T10:00:00Z",
+            Host = "PC-2",
+            Source = "Test",
+            Level = EventLevel.Warning
+        });
+
+        dbService.AddEvent(new Event
+        {
+            Timestamp = "2026-03-18T11:00:00Z",
+            Host = "PC-1",
+            Source = "Test",
+            Level = EventLevel.Information
+        });
+        
+        // Act & Assert: Test different filters
+        
+        // Filter by level
+        var errorEvents = dbService.GetEvents(level: EventLevel.Error);
+        Assert.Equal(1, errorEvents.Count);
+        Assert.Equal(EventLevel.Error, errorEvents[0].Level);
+        
+        // Filter by host
+        var pc1Events = dbService.GetEvents(host: "PC-1");
+        Assert.Equal(2, pc1Events.Count);
+        Assert.All(pc1Events, e => Assert.Equal("PC-1", e.Host));
+        
+        // Filter by time range
+        var timeRangeEvents = dbService.GetEvents(startTime: "2026-03-18T10:00:00Z");
+        Assert.Equal(2, timeRangeEvents.Count);
+        
+        // Combined filters
+        var combinedEvents = dbService.GetEvents(level: EventLevel.Error, host: "PC-1");
+        Assert.Equal(1, combinedEvents.Count);
+        
+        // Cleanup
+        File.Delete(testDbPath);
+    }
 }
