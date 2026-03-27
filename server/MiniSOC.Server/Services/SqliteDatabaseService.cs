@@ -91,4 +91,58 @@ public class SqliteDatabaseService : IDatabaseService
             return false;
         }
     }
+
+    // Read - refactor into new file if queries add up
+    public int GetEventCount()
+    {
+        using var connection = GetConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT COUNT(*) FROM Events";
+        var count = (long)command.ExecuteScalar();
+        return (int)count;
+    }
+
+    public List<Event> GetAllEvents()
+    {
+        var events = new List<Event>();
+
+        using var connection = GetConnection();
+        connection.Open();
+
+        var command = connection.CreateCommand();
+        command.CommandText = "SELECT * FROM Events";
+        using var reader = command.ExecuteReader();
+
+        while (reader.Read())
+        {
+            var event_id = reader["event_id"].ToString();
+            var timestamp = reader["timestamp"].ToString();
+            var host = reader["host"].ToString();
+            var source = reader["source"].ToString();
+            var channel = reader["channel"] == DBNull.Value ? null : reader["channel"].ToString();
+            var provider = reader["provider"] == DBNull.Value ? null : reader["provider"].ToString();
+            var levelString = reader["level"].ToString();
+            var level = Enum.Parse<EventLevel>(levelString);
+            var message = reader["message"] == DBNull.Value ? null : reader["message"].ToString();
+            var rawJson = reader["raw"] == DBNull.Value ? null : reader["raw"].ToString();
+            var raw = rawJson != null ? JsonSerializer.Deserialize<Dictionary<string, object>>(rawJson) :null;
+        
+            var evt = new Event
+            {
+                EventId = event_id,
+                Timestamp = timestamp,
+                Host = host,
+                Source = source,
+                Channel = channel,
+                Provider = provider,
+                Level = level,
+                Message = message,
+                Raw = raw
+            };
+            events.Add(evt);
+        }
+        return events;        
+    }
 }
