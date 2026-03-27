@@ -34,6 +34,7 @@ app.UseHttpsRedirection();
 
 app.MapHealthEndpoints();
 app.MapIngestEndpoints();
+app.MapEventsEndpoints();
 
 app.Run();
 
