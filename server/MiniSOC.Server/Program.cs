@@ -11,7 +11,6 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<IEventStorageService, EventStorageService>();
 builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
 
 var app = builder.Build();
