@@ -7,8 +7,8 @@ REST API for the MiniSOC log collection platform.
 - ✅ Event ingestion endpoint implemented
 - ✅ SQLite database setup and schema creation
 - ✅ Event persistence (INSERT to database)
-- ⏳ Event retrieval (SELECT) - Issue #12
-- ⏳ Migration to SQLite-only storage - Issue #13
+- ✅ Event retrieval (SELECT with filters)
+- ✅ Migration to SQLite-only storage (in-memory removed)
 
 ## Quick Start
 
@@ -162,18 +162,18 @@ server/
 │   │   ├── HealthResponse.cs
 │   │   └── IngestResponse.cs
 │   └── Services/                     # Business logic & data access
-│       ├── IEventStorageService.cs   # In-memory storage interface
-│       ├── EventStorageService.cs    # In-memory storage implementation
 │       ├── IDatabaseService.cs       # Database interface
 │       └── SqliteDatabaseService.cs  # SQLite implementation
 └── MiniSOC.Server.Tests/             # Integration tests
     ├── HealthEndpointTests.cs
     ├── IngestEndpointTests.cs
-    └── DatabaseServiceTests.cs
+    ├── DatabaseServiceTests.cs
+    ├── EventPersistenceTests.cs
+    └── EventRetrievalTests.cs
 ```
 
 ## Technology Stack
-- ASP.NET Core 8 (Minimal APIs)
+- ASP.NET Core 8+ (Minimal APIs)
 - SQLite (Database) with Microsoft.Data.Sqlite
 - xUnit (Testing)
 - Swagger/OpenAPI (Documentation)
@@ -189,9 +189,7 @@ Events follow schema v0.1 as defined in `docs/event-schema-v0.1.md`.
 - **Persistence:** Events are saved to database via POST /ingest
 
 ### Current State
-Events are now persisted to SQLite database. The in-memory storage (`EventStorageService`) 
-is still active alongside SQLite for backward compatibility. 
-Full migration to SQLite-only storage will happen in Issue #13.
+All events are persisted to SQLite database. In-memory storage has been removed as of Issue #13.
 
 ## Next Steps
 See `docs/backlog.md` for planned features.

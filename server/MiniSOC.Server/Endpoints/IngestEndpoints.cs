@@ -11,7 +11,6 @@ public static class IngestEndpoints
     {
         app.MapPost("/ingest", async (
             HttpContext context,
-            [FromServices] IEventStorageService storage,
             [FromServices] IDatabaseService database) =>
         {
             var response = new IngestResponse();
@@ -70,7 +69,6 @@ public static class IngestEndpoints
                         bool addedToDatabase = database.AddEvent(evt);
                         if (addedToDatabase)
                         {
-                            storage.AddEvent(evt); // Also add to memory
                             response = response with { Accepted = response.Accepted + 1 };
                         }
                         else
