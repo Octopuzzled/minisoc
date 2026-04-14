@@ -12,6 +12,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
+builder.Services.AddSingleton<IMetricsService, SqliteMetricsService>();
 
 var app = builder.Build();
 
@@ -34,6 +35,7 @@ app.UseHttpsRedirection();
 app.MapHealthEndpoints();
 app.MapIngestEndpoints();
 app.MapEventsEndpoints();
+app.MapMetricsEndpoints();
 
 app.Run();
 
