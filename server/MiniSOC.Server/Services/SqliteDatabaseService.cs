@@ -150,7 +150,8 @@ public class SqliteDatabaseService : IDatabaseService
         string? startTime = null,
         string? endTime = null,
         EventLevel? level = null,
-        string? host = null)
+        string? host = null,
+        string? provider = null)
     {
         var events = new List<Event>();
         
@@ -184,6 +185,12 @@ public class SqliteDatabaseService : IDatabaseService
         {
             conditions.Add("host = $host");
             command.Parameters.AddWithValue("$host", host);
+        }
+
+        if (provider != null)
+        {
+            conditions.Add("provider = $provider");
+            command.Parameters.AddWithValue("$provider", provider);
         }
 
         var whereClause = conditions.Count > 0 

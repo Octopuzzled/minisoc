@@ -13,9 +13,10 @@ public static class EventsEndpoints
         string? startTime,
         string? endTime,
         EventLevel? level,
-        string? host) =>
+        string? host,
+        string? provider) =>
     {
-        var events = database.GetEvents(startTime, endTime, level, host);
+        var events = database.GetEvents(startTime, endTime, level, host, provider);
         return Results.Ok(events);
     });
     }

@@ -19,6 +19,7 @@ public interface IDatabaseService
     string? startTime = null,
     string? endTime = null,
     EventLevel? level = null,
-    string? host = null
+    string? host = null,
+    string? provider = null
 );
 }
