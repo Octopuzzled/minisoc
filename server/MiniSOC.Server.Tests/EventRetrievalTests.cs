@@ -185,7 +185,7 @@ public class EventRetrievalTests
         var dbService = new SqliteDatabaseService(config);
         dbService.Initialize();
 
-        // Add events with different timestamps, levels, and hosts
+        // Add events with different timestamps, levels, hosts and providers
         dbService.AddEvent(new Event
         {
             Timestamp = "2026-03-18T09:00:00Z",
@@ -209,26 +209,43 @@ public class EventRetrievalTests
             Source = "Test",
             Level = EventLevel.Information
         });
+
+         dbService.AddEvent(new Event
+        {
+            Timestamp = "2026-04-14T12:00:00Z",
+            Host = "PC-2",
+            Source = "Test",
+            Level = EventLevel.Error,
+            Provider = "TestProvider"
+        });
         
         // Act & Assert: Test different filters
         
         // Filter by level
         var errorEvents = dbService.GetEvents(level: EventLevel.Error);
-        Assert.Equal(1, errorEvents.Count);
+        Assert.Equal(2, errorEvents.Count);
         Assert.Equal(EventLevel.Error, errorEvents[0].Level);
         
         // Filter by host
         var pc1Events = dbService.GetEvents(host: "PC-1");
         Assert.Equal(2, pc1Events.Count);
         Assert.All(pc1Events, e => Assert.Equal("PC-1", e.Host));
+
+        //Filter by provider
+        var providerEvents = dbService.GetEvents(provider: "TestProvider");
+        Assert.Equal(1, providerEvents.Count);
+        Assert.All(providerEvents, e => Assert.Equal("TestProvider", e.Provider));
         
         // Filter by time range
         var timeRangeEvents = dbService.GetEvents(startTime: "2026-03-18T10:00:00Z");
-        Assert.Equal(2, timeRangeEvents.Count);
+        Assert.Equal(3, timeRangeEvents.Count);
         
         // Combined filters
         var combinedEvents = dbService.GetEvents(level: EventLevel.Error, host: "PC-1");
         Assert.Equal(1, combinedEvents.Count);
+
+        var combinedEventsProvider = dbService.GetEvents(level: EventLevel.Error, host: "PC-2", provider: "TestProvider");
+        Assert.Equal(1, combinedEventsProvider.Count);
         
         // Cleanup
         File.Delete(testDbPath);
