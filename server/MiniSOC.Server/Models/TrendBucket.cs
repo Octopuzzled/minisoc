@@ -1,0 +1,1 @@
+public record TrendBucket(DateTime Time, int Count);
