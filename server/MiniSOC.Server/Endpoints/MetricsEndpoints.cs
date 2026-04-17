@@ -14,12 +14,18 @@ public static class MetricsEndpoints
             var count = metrics.GetEventCount();
             var levels = metrics.GetEventsByLevel();
             var hosts = metrics.GetEventsByHost();
+            var hours = metrics.GetEventsLast24h();
+            var days = metrics.GetEventsLast7d();
 
             return Results.Ok(new
             {
                 event_count = count,
                 by_level = levels,
-                by_host = hosts
+                by_host = hosts,
+                trend = new {
+                    last_24h = hours,
+                    last_7d = days
+                }
             });
         });
 
