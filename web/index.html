@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="style.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="app.js" defer></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Dashboard for MiniSOC">
+        <meta name="keywords" content="Dashboard, MiniSOC, SIEM">
+        <meta name="author" content="Paloma Schlichting">
+        <title>MiniSOC Dashboard</title>
+    </head>
+
+    <body>
+        <h1>Eventliste</h1>
+        <div id="events-container">
+            <label for="levels">Level: </label>
+            <select name="levels" id="levels">
+                <option value="">All levels</option>
+                <option value="Error">Error</option>
+                <option value="Warning">Warning</option>
+                <option value="Information">Information</option>
+            </select>
+            <label for="provider">Provider: </label>
+            <input type="text" id="provider" name="provider">
+            <label for="timestart">Start time: </label>
+            <input type="datetime-local" id="timestart">
+            <label for="timeend">End time: </label>
+            <input type="datetime-local" id="timeend">
+            <button type="submit" id="filter-btn">Use filters</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Host</th>
+                        <th>Level</th>
+                        <th>Provider</th>
+                        <th>Source</th>
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody id="events-body"></tbody>
+            </table>
+        </div>
+        <footer>
+
+        </footer>
+    </body>
+</html>
