@@ -9,13 +9,19 @@ document.addEventListener("DOMContentLoaded", () => {
         const timeend = document.getElementById("timeend").value;
         loadEvents(level, provider,timestart, timeend);
     });
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            document.getElementById("filter-btn").click();
+        }
+    });
 });
 
 async function loadEvents(level, provider, timestart, timeend) {
     const params = new URLSearchParams();
     if (level) params.append("level", level);
     if (provider) params.append("provider", provider);
-    if (timestart) params.append("startTime", new Date(timestart).toISOString());
+    if (timestart) params.append("startTime", timestart + ":00Z");
     if (timeend) params.append("endTime", new Date(timeend).toISOString());
     const url = `http://localhost:5152/events?${params}`;
     const response = await fetch(url);

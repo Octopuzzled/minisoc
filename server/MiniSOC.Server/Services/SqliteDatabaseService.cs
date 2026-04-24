@@ -189,7 +189,7 @@ public class SqliteDatabaseService : IDatabaseService
 
         if (provider != null)
         {
-            conditions.Add("provider = $provider");
+            conditions.Add("provider = $provider COLLATE NOCASE");
             command.Parameters.AddWithValue("$provider", provider);
         }
 
