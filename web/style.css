@@ -69,3 +69,15 @@ footer {
     font-size: 0.75rem;
     text-align: center;
 }
+
+#events-charts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+#events-charts canvas {
+    max-width: 400px;
+    max-height: 300px;
+}
