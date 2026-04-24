@@ -14,7 +14,17 @@
     </head>
 
     <body>
-        <h1>Eventliste</h1>
+        <header>
+            <div id="header-logo">
+                <span id="header-icon">⚡</span>
+                <span id="header-title">MiniSOC</span>
+            </div>
+            <div id="header-status">
+                <span class="status-dot"></span>
+                <span>Live</span>
+            </div>
+        </header>
+        <h1>Events</h1>
         <div id="events-container">
             <label for="levels">Level: </label>
             <select name="levels" id="levels">
@@ -44,11 +54,25 @@
                 <tbody id="events-body"></tbody>
             </table>
         </div>
+        <div id="metrics-cards">
+            <div class="card">
+                <span class="card-label">Total Events</span>
+                <span class="card-value" id="card-total">—</span>
+            </div>
+            <div class="card">
+                <span class="card-label">Errors</span>
+                <span class="card-value card-error" id="card-errors">—</span>
+            </div>
+            <div class="card">
+                <span class="card-label">Hosts</span>
+                <span class="card-value" id="card-hosts">—</span>
+            </div>
+        </div>
         <div id="events-charts">
-            <canvas id="clevel"></canvas>
-            <canvas id="chost"></canvas>
-            <canvas id="c24h"></canvas>
-            <canvas id="c7d"></canvas>
+            <div><canvas id="clevel"></canvas></div>
+            <div><canvas id="chost"></canvas></div>
+            <div><canvas id="c24h"></canvas></div>
+            <div><canvas id="c7d"></canvas></div>
         </div>
         <footer>
 

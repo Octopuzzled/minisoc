@@ -44,6 +44,9 @@ async function loadEvents(level, provider, timestart, timeend) {
 async function loadMetrics() {
     const response = await fetch('http://localhost:5152/metrics');
     const metrics = await response.json();
+    document.getElementById("card-total").textContent = metrics.event_count;
+    document.getElementById("card-errors").textContent = metrics.by_level["Error"] ?? 0;
+    document.getElementById("card-hosts").textContent = Object.keys(metrics.by_host).length;
 
     //By level chart
     const levelData = metrics.by_level;
