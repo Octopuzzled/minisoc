@@ -25,10 +25,10 @@ public interface IMetricsService
     /// <summary>
     /// Returns event counts in hourly buckets for the last 24 hours
     /// </summary>
-    List<TrendBucket> GetEventsLast24h();
+    List<TrendBucket> GetEventsLast24h(DateTime? now = null);
 
     /// <summary>
     /// Returns event counts in daily buckets for the last 7 days
     /// </summary>
-    List<TrendBucket> GetEventsLast7d();
+    List<TrendBucket> GetEventsLast7d(DateTime? now = null);
 }
