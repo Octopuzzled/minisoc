@@ -90,7 +90,7 @@ public class MetricsTests
         dbService.Initialize();
 
         //Add events with different timestamps and some with same timestamp
-        var now = DateTime.UtcNow;
+        var now = new DateTime(2026, 4, 15, 12, 0, 0, DateTimeKind.Utc);
         var timestamp1 = now.AddMinutes(-30).ToString("yyyy-MM-ddTHH:mm:ssZ");
         var timestamp2 = now.AddHours(-3).ToString("yyyy-MM-ddTHH:mm:ssZ");
 
@@ -119,7 +119,7 @@ public class MetricsTests
         });
 
         // Act & Assert
-        var events = metricsService.GetEventsLast24h();
+        var events = metricsService.GetEventsLast24h(now);
         Assert.Equal(24, events.Count);
 
         var expectedHour1 = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(-1);
@@ -151,7 +151,8 @@ public class MetricsTests
         dbService.Initialize();
 
         //Add events with different timestamps and some with same timestamp
-        var timestamp = DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd");
+        var now = new DateTime(2026, 4, 15, 12, 0, 0, DateTimeKind.Utc);
+        var timestamp = now.AddDays(-1).ToString("yyyy-MM-dd");
         dbService.AddEvent(new Event
         {
             Timestamp = timestamp,
@@ -161,10 +162,10 @@ public class MetricsTests
         });
 
         //Act & Assert
-        var events = metricsService.GetEventsLast7d();
+        var events = metricsService.GetEventsLast7d(now);
         Assert.Equal(7, events.Count);
 
-        var expectedDay = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, DateTime.UtcNow.Day, 0, 0, 0).AddDays(-1);
+        var expectedDay = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc).AddDays(-1);
         var bucket = events.First(b => b.Time == expectedDay);
         Assert.Equal(1, bucket.Count);
     }

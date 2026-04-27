@@ -71,13 +71,13 @@ public class SqliteMetricsService : IMetricsService
     /// Returns event counts in hourly buckets for the last 24 hours (UTC).
     /// Buckets with no events return count 0.
     /// </summary>
-    public List<TrendBucket> GetEventsLast24h()
+    public List<TrendBucket> GetEventsLast24h(DateTime? now = null)
     {
+        var effectiveNow = now ?? DateTime.UtcNow;
         var result = new List<TrendBucket>();
         var dict = new Dictionary<string, int>();
 
-        var now = DateTime.UtcNow;
-        var end = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(1);
+        var end = new DateTime(effectiveNow.Year, effectiveNow.Month, effectiveNow.Day, effectiveNow.Hour, 0, 0, DateTimeKind.Utc).AddHours(1);
         var start = end.AddHours(-24);
         
         using var connection = _database.GetConnection();
@@ -115,13 +115,13 @@ public class SqliteMetricsService : IMetricsService
     /// Returns event counts in daily buckets for the last 7 days (UTC).
     /// Buckets with no events return count 0.
     /// </summary>
-    public List<TrendBucket> GetEventsLast7d()
+    public List<TrendBucket> GetEventsLast7d(DateTime? now = null)
     {
         var result = new List<TrendBucket>();
         var dict = new Dictionary<string, int>();
 
-        var now = DateTime.UtcNow;
-        var end = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc);
+        var effectiveNow = now ?? DateTime.UtcNow;
+        var end = new DateTime(effectiveNow.Year, effectiveNow.Month, effectiveNow.Day, 0, 0, 0, DateTimeKind.Utc);
         var start = end.AddDays(-7);
         
         using var connection = _database.GetConnection();
