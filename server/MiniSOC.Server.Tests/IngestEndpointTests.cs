@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace MiniSOC.Server.Tests;
 
+/// <summary>
+/// Integration tests for the event ingestion endpoint
+/// </summary>
 public class IngestEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;

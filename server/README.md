@@ -1,14 +1,16 @@
+```markdown
 # MiniSOC Server
 
 REST API for the MiniSOC log collection platform.
 
 ## Status
-- ✅ Health check endpoint implemented
-- ✅ Event ingestion endpoint implemented
+- ✅ Health check endpoint
+- ✅ Event ingestion endpoint
 - ✅ SQLite database setup and schema creation
 - ✅ Event persistence (INSERT to database)
-- ✅ Event retrieval (SELECT with filters)
-- ✅ Migration to SQLite-only storage (in-memory removed)
+- ✅ Event retrieval with filters (level, host, provider, time range)
+- ✅ Metrics endpoint (event count, breakdown by level and host, trend data)
+- ✅ Web UI with dashboard, filters and charts
 
 ## Quick Start
 
@@ -20,9 +22,14 @@ dotnet run
 
 Server starts on: `http://localhost:5152`
 
-### Available Endpoints
+### Open the UI
+Open `web/index.html` with Live Server in VS Code.
 
-#### GET /health
+---
+
+## Available Endpoints
+
+### GET /health
 Health check endpoint.
 
 **Response:**
@@ -34,12 +41,9 @@ Health check endpoint.
 }
 ```
 
-**Status Codes:**
-- `200 OK` - Service is healthy
-
 ---
 
-#### POST /ingest
+### POST /ingest
 Ingest security events for storage and analysis.
 
 **Request Body:**
@@ -55,24 +59,6 @@ Single event:
   "channel": "Security",
   "provider": "Microsoft-Windows-Security-Auditing"
 }
-```
-
-Array of events:
-```json
-[
-  {
-    "timestamp": "2026-02-03T16:00:00Z",
-    "host": "DESKTOP-123",
-    "source": "WindowsEventLog",
-    "level": "Error"
-  },
-  {
-    "timestamp": "2026-02-03T16:01:00Z",
-    "host": "SERVER-456",
-    "source": "WindowsEventLog",
-    "level": "Warning"
-  }
-]
 ```
 
 **Required Fields:**
@@ -97,47 +83,57 @@ Array of events:
 }
 ```
 
-**Status Codes:**
-- `200 OK` - All events accepted
-- `400 Bad Request` - Validation errors or malformed JSON
+---
 
-**Error Response Example:**
-```json
-{
-  "accepted": 1,
-  "rejected": 1,
-  "errors": [
-    {
-      "index": 1,
-      "reason": "Timestamp is required"
-    }
-  ]
-}
+### GET /events
+Query stored events with optional filters.
+
+**Query Parameters (all optional):**
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `level` | string | Filter by level (Error, Warning, Information) |
+| `host` | string | Filter by host name |
+| `provider` | string | Filter by provider (case-insensitive) |
+| `startTime` | string | ISO 8601 timestamp, inclusive |
+| `endTime` | string | ISO 8601 timestamp, inclusive |
+
+**Response:** Array of event objects (empty array if no matches)
+
+**curl example:**
+```bash
+curl "http://localhost:5152/events?level=Error&provider=Service%20Control%20Manager"
 ```
 
 ---
 
-### Test the API
+### GET /metrics
+Returns aggregated event statistics.
 
-**Browser:**
-- Swagger UI: `http://localhost:5152/swagger`
-- Health endpoint: `http://localhost:5152/health`
-
-**curl examples:**
-```bash
-# Health check
-curl http://localhost:5152/health
-
-# Ingest single event
-curl -X POST http://localhost:5152/ingest \
-  -H "Content-Type: application/json" \
-  -d '{"timestamp":"2026-02-03T16:00:00Z","host":"PC-123","source":"WindowsEventLog","level":"Error"}'
-
-# Ingest multiple events
-curl -X POST http://localhost:5152/ingest \
-  -H "Content-Type: application/json" \
-  -d '[{"timestamp":"2026-02-03T16:00:00Z","host":"PC-1","source":"WindowsEventLog","level":"Error"},{"timestamp":"2026-02-03T16:01:00Z","host":"PC-2","source":"WindowsEventLog","level":"Warning"}]'
+**Response:**
+```json
+{
+  "event_count": 135,
+  "by_level": {
+    "Error": 10,
+    "Warning": 25,
+    "Information": 100
+  },
+  "by_host": {
+    "DESKTOP-1234": 80,
+    "DESKTOP-5678": 55
+  },
+  "trend": {
+    "last_24h": [
+      { "time": "2026-04-17T13:00:00Z", "count": 12 }
+    ],
+    "last_7d": [
+      { "time": "2026-04-11T00:00:00Z", "count": 85 }
+    ]
+  }
+}
 ```
+
+---
 
 ## Development
 
@@ -155,41 +151,38 @@ server/
 │   ├── appsettings.json              # Configuration (connection strings)
 │   ├── Endpoints/                    # API endpoint definitions
 │   │   ├── HealthEndpoints.cs
-│   │   └── IngestEndpoints.cs
+│   │   ├── IngestEndpoints.cs
+│   │   ├── EventsEndpoints.cs
+│   │   └── MetricsEndpoints.cs
 │   ├── Models/                       # Request/response models
 │   │   ├── Event.cs
 │   │   ├── EventLevel.cs
 │   │   ├── HealthResponse.cs
-│   │   └── IngestResponse.cs
+│   │   ├── IngestResponse.cs
+│   │   └── TrendBucket.cs
 │   └── Services/                     # Business logic & data access
 │       ├── IDatabaseService.cs       # Database interface
-│       └── SqliteDatabaseService.cs  # SQLite implementation
-└── MiniSOC.Server.Tests/             # Integration tests
-    ├── HealthEndpointTests.cs
-    ├── IngestEndpointTests.cs
+│       ├── SqliteDatabaseService.cs  # SQLite implementation
+│       ├── IMetricsService.cs        # Metrics interface
+│       └── SqliteMetricsService.cs   # SQLite metrics implementation
+└── MiniSOC.Server.Tests/
     ├── DatabaseServiceTests.cs
     ├── EventPersistenceTests.cs
-    └── EventRetrievalTests.cs
+    ├── EventRetrievalTests.cs
+    ├── HealthEndpointTests.cs
+    ├── IngestEndpointTests.cs
+    └── MetricsTests.cs
 ```
 
 ## Technology Stack
-- ASP.NET Core 8+ (Minimal APIs)
-- SQLite (Database) with Microsoft.Data.Sqlite
+- ASP.NET Core 8 (Minimal APIs)
+- SQLite with Microsoft.Data.Sqlite
 - xUnit (Testing)
 - Swagger/OpenAPI (Documentation)
 
 ## Event Schema
 Events follow schema v0.1 as defined in `docs/event-schema-v0.1.md`.
 
-### Storage
-- **Database:** SQLite (`events.db`)
-- **Location:** Same directory as server executable
-- **Schema:** See ADR 0005 for database design decisions
-- **Initialization:** Database and table created automatically on first startup
-- **Persistence:** Events are saved to database via POST /ingest
-
-### Current State
-All events are persisted to SQLite database. In-memory storage has been removed as of Issue #13.
-
 ## Next Steps
-See `docs/backlog.md` for planned features.
+See `docs/backlog.md` for planned features (Milestone 7: Polish, Milestone 8: Agent & Real Events).
+```

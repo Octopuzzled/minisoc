@@ -20,6 +20,16 @@ Use prefixes like:
 - chore: tooling/structure
 - refactor: code restructure without behavior change
 
+## Branch naming
+Use prefixes matching the commit type:
+- `feat/` — new feature
+- `fix/` — bug fix
+- `docs/` — documentation only
+- `chore/` — tooling/structure/cleanup
+- `refactor/` — code restructure without behavior change
+
+Examples: `feat/provider-filter`, `fix/known-issues`, `docs/adr-0005`
+
 ## Issue structure (from Milestone 5)
 
 Use the following template for feature issues:

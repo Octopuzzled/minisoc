@@ -42,6 +42,15 @@ Starts the MiniSOC agent.
 
 ---
 
+### UI
+Open `web/index.html` with Live Server in VS Code, or any local HTTP server.
+
+**Requirements:**
+- Server must be running
+- Live Server extension for VS Code (recommended)
+
+---
+
 ## Typical Workflow
 
 **Terminal 1 (Server):**

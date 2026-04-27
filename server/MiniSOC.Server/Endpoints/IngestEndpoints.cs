@@ -5,8 +5,16 @@ using System.Text.Json;
 
 namespace MiniSOC.Server.Endpoints;
 
+/// <summary>
+/// Event ingestion endpoint configuration
+/// </summary>
 public static class IngestEndpoints
 {
+    /// <summary>
+    /// Maps the ingest endpoint to the application.
+    /// Accepts a single event or an array of events as JSON.
+    /// Validates each event and returns a summary of accepted and rejected events.
+    /// </summary>
     public static void MapIngestEndpoints(this WebApplication app)
     {
         app.MapPost("/ingest", async (
@@ -106,6 +114,9 @@ public static class IngestEndpoints
         .WithOpenApi();        
     }
     
+     /// <summary>
+    /// Validates required fields on an event before storage.
+    /// </summary>
     private static List<string> ValidateEvent(Event evt)
     {
         var errors = new List<string>();

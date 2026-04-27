@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IDatabaseService, SqliteDatabaseService>();
 builder.Services.AddSingleton<IMetricsService, SqliteMetricsService>();
 
-//Configure CORS policy
+// Configure CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigins", policy =>
@@ -48,6 +48,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigins");
 
+// Register endpoints
 app.MapHealthEndpoints();
 app.MapIngestEndpoints();
 app.MapEventsEndpoints();

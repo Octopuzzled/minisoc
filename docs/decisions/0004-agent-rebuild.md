@@ -31,5 +31,5 @@ Rebuild the agent from scratch using a clean interface-based architecture:
 2. Implement `IEventSource` interface
 3. Implement `DummyEventSource` for development
 4. Implement HTTP client for /ingest endpoint
-5. Add configuration system
+5. Add configuration system - deferred to Milestone 8
 6. Document in `docs/setup/agent.md`
