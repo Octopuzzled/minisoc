@@ -11,9 +11,7 @@ We need a simple server + DB + UI to ingest and visualize events.
 For milestone 1 we keep server/db/ui as TBD.
 We only define interfaces (schema + API contract) to avoid premature decisions.
 
-## Next step
-In milestone 3/4 we will choose:
-- Server framework
-- Database
-- UI framework
-based on simplicity and learning value.
+## Outcome
+- Server: ASP.NET Core Minimal APIs (.NET 8)
+- Database: SQLite
+- UI: Vanilla HTML/CSS/JS

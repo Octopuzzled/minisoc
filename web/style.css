@@ -64,6 +64,7 @@ header {
     50% { opacity: 0.3; }
 }
 
+/* Typography */
 h1 {
     color: #7eb8f7;
     font-size: 1.5rem;
@@ -72,92 +73,7 @@ h1 {
     text-transform: uppercase;
 }
 
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-}
-
-thead tr {
-    background-color: #1e2130;
-    color: #7eb8f7;
-    text-align: left;
-}
-
-th, td {
-    padding: 0.75rem 1rem;
-    border-bottom: 1px solid #2a2d3e;
-}
-
-tbody tr:nth-child(even) {
-    background-color: #161822;
-}
-
-tbody tr:hover {
-    background-color: #1e2130;
-    cursor: default;
-}
-
-/* Level colors */
-.level-error {
-    color: #ff6b6b;
-    font-weight: 600;
-}
-
-.level-warning {
-    color: #ffa94d;
-    font-weight: 600;
-}
-
-.level-information {
-    color: #74c0fc;
-}
-
-/* Footer */
-footer {
-    margin-top: 2rem;
-    color: #444;
-    font-size: 0.75rem;
-    text-align: center;
-}
-
-/* Metric Cards */
-#metrics-cards {
-    display: flex;
-    gap: 1.5rem;
-    margin: 2rem 0;
-}
-
-.card {
-    background-color: #1e2130;
-    border: 1px solid #2a2d3e;
-    border-radius: 8px;
-    padding: 1.25rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 150px;
-}
-
-.card-label {
-    color: #7eb8f7;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 0.5rem;
-}
-
-.card-value {
-    color: #e0e0e0;
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.card-error {
-    color: #ff6b6b;
-}
-
+/* Event filter and table */
 #events-container {
     background-color: #1e2130;
     border: 1px solid #2a2d3e;
@@ -201,6 +117,84 @@ button:hover {
     background-color: #a5d0ff;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+thead tr {
+    background-color: #1e2130;
+    color: #7eb8f7;
+    text-align: left;
+}
+
+th, td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #2a2d3e;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #161822;
+}
+
+tbody tr:hover {
+    background-color: #1e2130;
+    cursor: default;
+}
+
+/* Level colors */
+.level-error {
+    color: #ff6b6b;
+    font-weight: 600;
+}
+
+.level-warning {
+    color: #ffa94d;
+    font-weight: 600;
+}
+
+.level-information {
+    color: #74c0fc;
+}
+
+/* Metric cards */
+#metrics-cards {
+    display: flex;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.card {
+    background-color: #1e2130;
+    border: 1px solid #2a2d3e;
+    border-radius: 8px;
+    padding: 1.25rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+}
+
+.card-label {
+    color: #7eb8f7;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+}
+
+.card-value {
+    color: #e0e0e0;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.card-error {
+    color: #ff6b6b;
+}
+
+/* Charts */
 #events-charts {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -213,4 +207,12 @@ button:hover {
     border: 1px solid #2a2d3e;
     border-radius: 8px;
     padding: 1rem;
+}
+
+/* Footer */
+footer {
+    margin-top: 2rem;
+    color: #444;
+    font-size: 0.75rem;
+    text-align: center;
 }

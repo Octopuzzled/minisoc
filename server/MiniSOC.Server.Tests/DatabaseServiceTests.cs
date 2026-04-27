@@ -3,6 +3,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace MiniSOC.Server.Tests;
 
+/// <summary>
+/// Tests for database initialization and schema creation
+/// </summary>
 public class DatabaseServiceTests
 {
     [Fact]
@@ -14,11 +17,11 @@ public class DatabaseServiceTests
             File.Delete(testDbPath);
 
         var config = new ConfigurationBuilder()
-        .AddInMemoryCollection(new Dictionary<string, string>
-        {
-            ["ConnectionStrings:EventsDatabase"] = "Data Source=test_events.db"
-        })
-        .Build();
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                ["ConnectionStrings:EventsDatabase"] = "Data Source=test_events.db"
+            })
+            .Build();
         var dbService = new SqliteDatabaseService(config);
         
         // Act
@@ -38,5 +41,5 @@ public class DatabaseServiceTests
         // Cleanup
         connection.Close();
         File.Delete("test_events.db");
-            }
+    }
 }

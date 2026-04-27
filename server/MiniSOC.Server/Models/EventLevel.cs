@@ -25,6 +25,7 @@ public enum EventLevel
     
     /// <summary>
     /// Critical - severe issue requiring immediate attention
+    /// // Reserved for future use
     /// </summary>
     Critical = 3
 }

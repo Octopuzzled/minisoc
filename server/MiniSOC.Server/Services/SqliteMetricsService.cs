@@ -1,14 +1,11 @@
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Configuration; 
 using MiniSOC.Server.Models;
-using System.Text.Json;
 
 namespace MiniSOC.Server.Services;
 
 /// <summary>
-/// Service for metrics used in dashboard
+/// SQLite implementation of metrics service for aggregated event statistics
 /// </summary>
-/// 
 public class SqliteMetricsService : IMetricsService
 {
     private readonly IDatabaseService _database;
@@ -18,11 +15,17 @@ public class SqliteMetricsService : IMetricsService
         _database = database;
     }
 
+    /// <summary>
+    /// Returns the total number of stored events
+    /// </summary>
     public int GetEventCount()
     {
         return _database.GetEventCount();
     }
 
+    /// <summary>
+    /// Returns event counts grouped by severity level
+    /// </summary>
     public Dictionary<string, int> GetEventsByLevel()
     {
         var result = new Dictionary<string, int>();
@@ -42,6 +45,9 @@ public class SqliteMetricsService : IMetricsService
         return result;
     }
 
+    /// <summary>
+    /// Returns event counts grouped by host
+    /// </summary>
     public Dictionary<string, int> GetEventsByHost()
     {
         var result = new Dictionary<string, int>();
@@ -61,6 +67,10 @@ public class SqliteMetricsService : IMetricsService
         return result;
     }
 
+    /// <summary>
+    /// Returns event counts in hourly buckets for the last 24 hours (UTC).
+    /// Buckets with no events return count 0.
+    /// </summary>
     public List<TrendBucket> GetEventsLast24h()
     {
         var result = new List<TrendBucket>();
@@ -85,6 +95,7 @@ public class SqliteMetricsService : IMetricsService
             dict[timeString] = count;
         }
 
+        // Fill all 24 buckets, using 0 for hours with no events
         while (start < end)
         {
             if (dict.ContainsKey(start.ToString("yyyy-MM-ddTHH:00:00Z")))
@@ -100,7 +111,11 @@ public class SqliteMetricsService : IMetricsService
         return result;
     }
 
-        public List<TrendBucket> GetEventsLast7d()
+    /// <summary>
+    /// Returns event counts in daily buckets for the last 7 days (UTC).
+    /// Buckets with no events return count 0.
+    /// </summary>
+    public List<TrendBucket> GetEventsLast7d()
     {
         var result = new List<TrendBucket>();
         var dict = new Dictionary<string, int>();
@@ -124,6 +139,7 @@ public class SqliteMetricsService : IMetricsService
             dict[timeString] = count;
         }
 
+        // Fill all 7 buckets, using 0 for days with no events
         while (start < end)
         {
             if (dict.ContainsKey(start.ToString("yyyy-MM-dd")))

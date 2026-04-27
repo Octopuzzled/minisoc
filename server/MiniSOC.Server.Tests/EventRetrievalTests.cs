@@ -219,7 +219,7 @@ public class EventRetrievalTests
             Provider = "TestProvider"
         });
         
-        // Act & Assert: Tst different filters
+        // Act & Assert: Test different filters
         
         // Filter by level
         var errorEvents = dbService.GetEvents(level: EventLevel.Error);

@@ -18,7 +18,7 @@ We use **Minimal APIs** with structured organization via extension methods.
 Instead of putting all routes in `Program.cs`, we organize endpoints in separate files:
 - `Endpoints/HealthEndpoints.cs`
 - `Endpoints/IngestEndpoints.cs`
-- `Endpoints/QueryEndpoints.cs`
+- `Endpoints/EventsEndpoints.cs`
 
 Each file contains an extension method like `MapHealthEndpoints(this WebApplication app)`.
 

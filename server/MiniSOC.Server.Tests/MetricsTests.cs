@@ -1,7 +1,6 @@
 using MiniSOC.Server.Services;
 using MiniSOC.Server.Models;
 using Microsoft.Extensions.Configuration;
-using System.Text.Json;
 
 namespace MiniSOC.Server.Tests;
 
@@ -11,7 +10,6 @@ namespace MiniSOC.Server.Tests;
 public class MetricsTests
 {
     [Fact]
-
     public void GetMetrics_ReturnsAggregatedData()
     {
         // Arrange: Create test database with diverse events
@@ -73,7 +71,6 @@ public class MetricsTests
     }
 
     [Fact]
-
     public void GetMetrics_24h()
     {
         // Arrange: Create test database with diverse events
@@ -93,8 +90,10 @@ public class MetricsTests
         dbService.Initialize();
 
         //Add events with different timestamps and some with same timestamp
-        var timestamp1 = DateTime.UtcNow.AddMinutes(-30).ToString("yyyy-MM-ddTHH:mm:ssZ");
-        var timestamp2 = DateTime.UtcNow.AddHours(-3).ToString("yyyy-MM-ddTHH:mm:ssZ");
+        var now = DateTime.UtcNow;
+        var timestamp1 = now.AddMinutes(-30).ToString("yyyy-MM-ddTHH:mm:ssZ");
+        var timestamp2 = now.AddHours(-3).ToString("yyyy-MM-ddTHH:mm:ssZ");
+
         dbService.AddEvent(new Event
         {
             Timestamp = timestamp1,
@@ -123,19 +122,16 @@ public class MetricsTests
         var events = metricsService.GetEventsLast24h();
         Assert.Equal(24, events.Count);
 
-        var expectedHour1 = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 
-            DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0, DateTimeKind.Utc).AddHours(-1);
+        var expectedHour1 = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(-1);
         var bucket1 = events.First(b => b.Time == expectedHour1);
         Assert.Equal(2, bucket1.Count);
 
-        var expectedHour2 = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 
-            DateTime.UtcNow.Day, DateTime.UtcNow.Hour, 0, 0, DateTimeKind.Utc).AddHours(-3);
+        var expectedHour2 = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(-3);
         var bucket2 = events.First(b => b.Time == expectedHour2);
         Assert.Equal(1, bucket2.Count);
     }
 
     [Fact]
-
     public void GetMetrics_7d()
     {
         // Arrange: Create test database with diverse events

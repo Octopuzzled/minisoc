@@ -1,15 +1,21 @@
 using MiniSOC.Server.Services;
 using Microsoft.AspNetCore.Mvc;
-using MiniSOC.Server.Models;  
 
 namespace MiniSOC.Server.Endpoints;
 
+/// <summary>
+/// Metrics endpoint configuration
+/// </summary>
 public static class MetricsEndpoints
 {
+    /// <summary>
+    /// Maps the metrics endpoint to the application.
+    /// Returns aggregated event statistics including counts, breakdowns, and trend data.
+    /// </summary>
     public static void MapMetricsEndpoints(this WebApplication app)
     {
         app.MapGet("/metrics", (
-        [FromServices] IMetricsService metrics) =>
+            [FromServices] IMetricsService metrics) =>
         {
             var count = metrics.GetEventCount();
             var levels = metrics.GetEventsByLevel();
@@ -22,12 +28,12 @@ public static class MetricsEndpoints
                 event_count = count,
                 by_level = levels,
                 by_host = hosts,
-                trend = new {
+                trend = new
+                {
                     last_24h = hours,
                     last_7d = days
                 }
             });
         });
-
     }
 }

@@ -5,6 +5,9 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc.Testing;
 using MiniSOC.Server.Models;
 
+/// <summary>
+/// Integration tests for the health check endpoint
+/// </summary>
 public class HealthEndpointTests : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
@@ -33,6 +36,5 @@ public class HealthEndpointTests : IClassFixture<WebApplicationFactory<Program>>
         Assert.Equal("healthy", healthResponse.Status);
         Assert.Equal("0.1.0", healthResponse.Version);
         Assert.InRange(healthResponse.Timestamp, DateTime.UtcNow.AddMinutes(-1), DateTime.UtcNow.AddMinutes(1));
-
     }
 }

@@ -4,29 +4,20 @@ A small, portfolio-friendly log collection and analysis platform (SIEM-inspired)
 Goal: collect system events from endpoints, send to a server, store, and visualize.
 
 ## Status
-MVP complete! Agent collects and sends events to server via HTTP.
 
-**Currently implemented:**
-- ✅ Agent: Event collection with pluggable sources (DummyEventSource for development)
-- ✅ Agent: HTTP transmission to server (/ingest endpoint)
-- ✅ Server: REST API with /health and /ingest endpoints (in-memory storage)
-- ✅ Event schema v0.1 defined and implemented
-- ✅ API contract v0.1 defined and implemented
-- ✅ Helper scripts for easy development
+Milestones 1–6 complete. Currently in Milestone 7: Polish.
 
-**Next up (Milestone 4):**
-- ⏳ Database persistence (SQLite or PostgreSQL)
-- ⏳ Query endpoints (filter by time, severity, host)
-
-**Planned:**
-- ⏳ Advanced filters & metrics endpoints (Milestone 5)
-- ⏳ Windows Event Log integration (Milestone 2 - Windows phase)
-- ⏳ Web UI (Milestone 6)
+- ✅ Agent: Event collection pipeline with pluggable sources
+- ✅ Server: REST API with ingestion, filtering and metrics endpoints
+- ✅ Database: SQLite persistence
+- ✅ Web UI: Dashboard with event list, filters and charts
+- ✅ Milestone 7: Polish (known issue fixes, UI improvements, code cleanup, docs)
+- ⏳ Milestone 8: Real Windows Event Log ingestion, config system, packaging
 
 ## Scope (MVP)
 - Agent: reads Windows Event Logs and sends structured events
 - Server: REST API to ingest events + persistence
-- UI: basic dashboards + filters
+- UI: dashboard with filters and charts
 
 ## Non-goals (for now)
 - ML/AI detection
@@ -34,45 +25,46 @@ MVP complete! Agent collects and sends events to server via HTTP.
 - Cloud deployment
 - Multi-OS agent support (Windows agent first)
 
-## Architecture (high level)
-Agent (Windows) -> HTTP -> Server API -> Database -> Web UI
+## Architecture
+Agent (Windows) → HTTP → Server API → SQLite → Web UI
+
+See `docs/diagrams/architecture.md` for a detailed diagram.
 
 ## Tech Stack
 - Agent: C# (.NET 8, Console Application)
 - Server: ASP.NET Core 8 (Minimal APIs)
-- Database: TBD (Milestone 4)
-- UI: TBD (Milestone 6)
+- Database: SQLite (Microsoft.Data.Sqlite)
+- UI: Vanilla HTML/CSS/JS with Chart.js
 
-## Repository structure
+## Repository Structure
 - `agent/`   Windows agent (C#)
 - `server/`  API + persistence
-- `web/`     UI
-- `docs/`    documentation
-- `scripts/` helper scripts
+- `web/`     Dashboard UI
+- `docs/`    Documentation
+- `scripts/` Helper scripts
 
-## Getting started
+## Getting Started
 See `docs/setup/dev-environment.md`.
 
-**Quick start:**
 ```bash
 # Terminal 1 - Start server
 ./scripts/start-server.sh
 
-# Terminal 2 - Start agent
+# Terminal 2 - Start agent (optional)
 ./scripts/start-agent.sh
+
+# Open UI
+# Open web/index.html with Live Server in VS Code
 ```
 
 ## Documentation
-- Component READMEs: `agent/README.md`, `server/README.md`
+- Component READMEs: `server/README.md`
 - Decisions: `docs/decisions/`
 - Setup: `docs/setup/`
 - Diagrams: `docs/diagrams/`
-
-## Roadmap
-- Milestones and high-level backlog: `docs/backlog.md`
-- Architecture diagram: `docs/diagrams/architecture.md`
-- Event schema: `docs/event-schema-v0.1.md`
 - API contract: `docs/api-contract-v0.1.md`
+- Event schema: `docs/event-schema-v0.1.md`
+- Backlog: `docs/backlog.md`
 
 ## License
-TBD
+MIT

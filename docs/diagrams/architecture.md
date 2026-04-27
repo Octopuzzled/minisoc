@@ -8,7 +8,7 @@ flowchart LR
 
   subgraph Backend
     S[Ingest API]
-    D[(Database)]
+    D[(SQLite)]
     Q[Query API]
   end
 

@@ -18,6 +18,9 @@ public class SqliteDatabaseService : IDatabaseService
             ?? throw new InvalidOperationException("Database connection string not configured");
     }
     
+    /// <summary>
+    /// Creates the Events table if it does not already exist
+    /// </summary>
     public void Initialize()
     {
         using var connection = GetConnection();
@@ -40,11 +43,19 @@ public class SqliteDatabaseService : IDatabaseService
         command.ExecuteNonQuery();
     }
     
+    /// <summary>
+    /// Returns a new SQLite connection using the configured connection string
+    /// </summary>
     public SqliteConnection GetConnection()
     {
         return new SqliteConnection(_connectionString);
     }
 
+    /// <summary>
+    /// Inserts a single event into the database.
+    /// Generates a UUID if no event_id is provided.
+    /// Returns false if an event with the same ID already exists.
+    /// </summary>
     public bool AddEvent(Event @event)
     {
         // Generate event_id if not provided
@@ -92,6 +103,9 @@ public class SqliteDatabaseService : IDatabaseService
         }
     }
 
+    /// <summary>
+    /// Returns the total number of stored events
+    /// </summary>
     public int GetEventCount()
     {
         using var connection = GetConnection();
@@ -103,6 +117,43 @@ public class SqliteDatabaseService : IDatabaseService
         return (int)count;
     }
 
+    /// <summary>
+    /// Maps a single SQLite reader row to an Event object
+    /// </summary>
+    private static Event MapEvent(SqliteDataReader reader)
+    {
+        // Map database row to Event object
+        var event_id = reader["event_id"].ToString();
+        var timestamp = reader["timestamp"].ToString();
+        var host = reader["host"].ToString();
+        var source = reader["source"].ToString();
+        var channel = reader["channel"] == DBNull.Value ? null : reader["channel"].ToString();
+        var provider = reader["provider"] == DBNull.Value ? null : reader["provider"].ToString();
+        var levelString = reader["level"].ToString();
+        var level = Enum.Parse<EventLevel>(levelString);
+        var message = reader["message"] == DBNull.Value ? null : reader["message"].ToString();
+        var rawJson = reader["raw"] == DBNull.Value ? null : reader["raw"].ToString();
+        var raw = rawJson != null ? JsonSerializer.Deserialize<Dictionary<string, object>>(rawJson) : null;
+
+        var evt = new Event
+        {
+            EventId = event_id,
+            Timestamp = timestamp,
+            Host = host,
+            Source = source,
+            Channel = channel,
+            Provider = provider,
+            Level = level,
+            Message = message,
+            Raw = raw
+        };
+
+        return evt;
+    }
+
+    /// <summary>
+    /// Returns all events without filtering
+    /// </summary>
     public List<Event> GetAllEvents()
     {
         var events = new List<Event>();
@@ -116,36 +167,16 @@ public class SqliteDatabaseService : IDatabaseService
 
         while (reader.Read())
         {
-            // Map database row to Event object
-            var event_id = reader["event_id"].ToString();
-            var timestamp = reader["timestamp"].ToString();
-            var host = reader["host"].ToString();
-            var source = reader["source"].ToString();
-            var channel = reader["channel"] == DBNull.Value ? null : reader["channel"].ToString();
-            var provider = reader["provider"] == DBNull.Value ? null : reader["provider"].ToString();
-            var levelString = reader["level"].ToString();
-            var level = Enum.Parse<EventLevel>(levelString);
-            var message = reader["message"] == DBNull.Value ? null : reader["message"].ToString();
-            var rawJson = reader["raw"] == DBNull.Value ? null : reader["raw"].ToString();
-            var raw = rawJson != null ? JsonSerializer.Deserialize<Dictionary<string, object>>(rawJson) : null;
-        
-            var evt = new Event
-            {
-                EventId = event_id,
-                Timestamp = timestamp,
-                Host = host,
-                Source = source,
-                Channel = channel,
-                Provider = provider,
-                Level = level,
-                Message = message,
-                Raw = raw
-            };
-            events.Add(evt);
+            events.Add(MapEvent(reader));
         }
         return events;        
     }
 
+    /// <summary>
+    /// Returns events matching the given filters. All parameters are optional.
+    /// Filters are combined with AND logic.
+    /// Provider filter is case-insensitive.
+    /// </summary>
     public List<Event> GetEvents(
         string? startTime = null,
         string? endTime = null,
@@ -203,32 +234,7 @@ public class SqliteDatabaseService : IDatabaseService
 
         while (reader.Read())
         {
-            // Map database row to Event object (using unique variable names to avoid parameter shadowing)
-            var eventIdValue = reader["event_id"].ToString();
-            var timestampValue = reader["timestamp"].ToString();
-            var hostValue = reader["host"].ToString();
-            var sourceValue = reader["source"].ToString();
-            var channelValue = reader["channel"] == DBNull.Value ? null : reader["channel"].ToString();
-            var providerValue = reader["provider"] == DBNull.Value ? null : reader["provider"].ToString();
-            var levelStringValue = reader["level"].ToString();
-            var levelValue = Enum.Parse<EventLevel>(levelStringValue);
-            var messageValue = reader["message"] == DBNull.Value ? null : reader["message"].ToString();
-            var rawJsonValue = reader["raw"] == DBNull.Value ? null : reader["raw"].ToString();
-            var rawValue = rawJsonValue != null ? JsonSerializer.Deserialize<Dictionary<string, object>>(rawJsonValue) : null;
-        
-            var evt = new Event
-            {
-                EventId = eventIdValue,
-                Timestamp = timestampValue,
-                Host = hostValue,
-                Source = sourceValue,
-                Channel = channelValue,
-                Provider = providerValue,
-                Level = levelValue,
-                Message = messageValue,
-                Raw = rawValue
-            };
-            events.Add(evt);
+            events.Add(MapEvent(reader));
         }        
         return events;
     }
