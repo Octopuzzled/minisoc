@@ -1,4 +1,5 @@
-﻿using MiniSOC.Agent.Clients;
+﻿using Microsoft.Extensions.Configuration;
+using MiniSOC.Agent.Clients;
 using MiniSOC.Agent.Services;
 
 // ============================================
@@ -7,7 +8,20 @@ using MiniSOC.Agent.Services;
 
 Console.WriteLine("MiniSOC Agent starting...\n");
 
-// 1. Create event source (dummy for development)
+// Load configuration from appsettings.json
+var config = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: false)
+    .Build();
+
+// Read agent settings with fallback defaults
+var serverUrl = config["Agent:ServerUrl"] ?? "http://localhost:5152";
+int.TryParse(config["Agent:IntervalSeconds"], out int intervalSeconds);
+if (intervalSeconds == 0) intervalSeconds = 30;
+var channels = config.GetSection("Agent:Channels").Get<string[]>();
+var levels = config.GetSection("Agent:Levels").Get<string[]>();
+
+// 1. Create event source (dummy for development; replace with WindowsEventLogSource for production)
 var source = new DummyEventSource();
 Console.WriteLine("✓ Event source initialized (DummyEventSource)");
 
@@ -16,8 +30,8 @@ var events = source.GetEvents();
 var eventList = events.ToList();
 Console.WriteLine($"✓ Collected {eventList.Count} event(s)\n");
 
-// 3. Create sender (HTTP to server)
-var sender = new HttpEventSender();
+// 3. Create sender using configured server URL
+var sender = new HttpEventSender(serverUrl);
 Console.WriteLine("✓ Event sender initialized (HTTP)\n");
 
 // 4. Send events to server
