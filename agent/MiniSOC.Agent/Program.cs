@@ -21,34 +21,41 @@ if (intervalSeconds == 0) intervalSeconds = 30;
 var channels = config.GetSection("Agent:Channels").Get<string[]>();
 var levels = config.GetSection("Agent:Levels").Get<string[]>();
 
-// 1. Create event source (dummy for development; replace with WindowsEventLogSource for production)
-var source = new DummyEventSource();
-Console.WriteLine("✓ Event source initialized (DummyEventSource)");
+// Create event source (dummy for development; replace with WindowsEventLogSource for production)
+    var source = new WindowsEventLogSource(channels ?? [], levels ?? []);
+    Console.WriteLine("✓ Event source initialized (WindowsEventLogSource)");
 
-// 2. Collect events
-var events = source.GetEvents();
-var eventList = events.ToList();
-Console.WriteLine($"✓ Collected {eventList.Count} event(s)\n");
+// Create sender using configured server URL
+    var sender = new HttpEventSender(serverUrl);
+    Console.WriteLine("✓ Event sender initialized (HTTP)\n");
 
-// 3. Create sender using configured server URL
-var sender = new HttpEventSender(serverUrl);
-Console.WriteLine("✓ Event sender initialized (HTTP)\n");
-
-// 4. Send events to server
-var success = await sender.SendEventsAsync(eventList);
-
-// 5. Report result
-Console.WriteLine();
-if (success)
+while (true)
 {
-    Console.WriteLine("========================================");
-    Console.WriteLine("✓ Agent completed successfully");
-    Console.WriteLine("========================================");
-}
-else
-{
-    Console.WriteLine("========================================");
-    Console.WriteLine("✗ Agent completed with errors");
-    Console.WriteLine("========================================");
-    Environment.Exit(1); // Exit with error code
+    Console.WriteLine($"\n--- Collection run at {DateTime.UtcNow:yyyy-MM-ddTHH:mm:ssZ} ---");
+    // Collect events
+    var events = source.GetEvents();
+    var eventList = events.ToList();
+    Console.WriteLine($"✓ Collected {eventList.Count} event(s)\n");
+
+    
+
+    // Send events to server
+    var success = await sender.SendEventsAsync(eventList);
+
+    // Report result
+    Console.WriteLine();
+    if (success)
+    {
+        Console.WriteLine("========================================");
+        Console.WriteLine("✓ Agent completed successfully");
+        Console.WriteLine("========================================");
+    }
+    else
+    {
+        Console.WriteLine("========================================");
+        Console.WriteLine("✗ Agent completed with errors");
+        Console.WriteLine("========================================");
+    }
+    Console.WriteLine($"\nWaiting {intervalSeconds} seconds before next collection...");
+    await Task.Delay(TimeSpan.FromSeconds(intervalSeconds));
 }
