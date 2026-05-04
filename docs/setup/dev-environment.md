@@ -1,22 +1,24 @@
 # Development Environment
 
-## Current development OS
-- Linux (Ubuntu)
+## Development OS
+- Server, UI: Linux (Ubuntu) or Windows
+- Agent: Windows only (requires Windows Event Log access)
 
 ## Target runtime
-- Agent runs on Windows
+- Agent runs on Windows (requires Administrator privileges)
 - Server + UI: platform-independent
 
 ## Tools
 - Git
 - Editor: VS Code
 - .NET 8 SDK
-- Live Server (VS Code Extension, für UI-Entwicklung)
-- SQLite (via Microsoft.Data.Sqlite, kein separates Tool nötig)
+- Live Server (VS Code Extension, for UI development)
+- SQLite (via Microsoft.Data.Sqlite, no separate tool needed)
 
 ## Notes
-- We develop most components on Linux.
+- Most components can be developed on Linux.
 - Windows-specific parts are isolated in `agent/`.
+- The agent requires Administrator privileges to read the Security event log channel.
 
 ## Quick Start
 

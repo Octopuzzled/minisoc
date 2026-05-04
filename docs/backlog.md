@@ -8,7 +8,6 @@
 ## Milestone 2: Agent reads logs ✅
 - [x] Prototype: DummyEventSource (development)
 - [x] Implement agent core pipeline (collect -> normalize -> output JSON)
-- [ ] Read Windows Event Logs (deferred to Milestone 8)
 
 ## Milestone 3: Transport ✅
 - [x] Server skeleton (health endpoint)
@@ -30,13 +29,13 @@
 - [x] Filters (level, provider, time range)
 - [x] Charts (by level, by host, trend)
 
-## Milestone 7: Polish ⏳
-- [ ] Fix known issues (timezone, case-insensitive provider)
-- [ ] UI improvements (header, metric cards, grid layout)
-- [ ] Code cleanup and comment review
-- [ ] Docs update
+## Milestone 7: Polish ✅
+- [x] Fix known issues (timezone, case-insensitive provider)
+- [x] UI improvements (header, metric cards, grid layout)
+- [x] Code cleanup and comment review
+- [x] Docs update
 
-## Milestone 8: Agent & Real Events ⏳
-- [ ] Real Windows Event Log ingestion
-- [ ] Config system
+## Milestone 8: Agent & Real Events ✅
+- [x] Real Windows Event Log ingestion
+- [x] Config system
 - [ ] Packaging

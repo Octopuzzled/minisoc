@@ -5,14 +5,12 @@ Goal: collect system events from endpoints, send to a server, store, and visuali
 
 ## Status
 
-Milestones 1–6 complete. Currently in Milestone 7: Polish.
+Milestones 1–8 complete. ✅
 
-- ✅ Agent: Event collection pipeline with pluggable sources
+- ✅ Agent: Real Windows Event Log ingestion with configurable channels and levels
 - ✅ Server: REST API with ingestion, filtering and metrics endpoints
 - ✅ Database: SQLite persistence
 - ✅ Web UI: Dashboard with event list, filters and charts
-- ✅ Milestone 7: Polish (known issue fixes, UI improvements, code cleanup, docs)
-- ⏳ Milestone 8: Real Windows Event Log ingestion, config system, packaging
 
 ## Scope (MVP)
 - Agent: reads Windows Event Logs and sends structured events
@@ -31,7 +29,7 @@ Agent (Windows) → HTTP → Server API → SQLite → Web UI
 See `docs/diagrams/architecture.md` for a detailed diagram.
 
 ## Tech Stack
-- Agent: C# (.NET 8, Console Application)
+- Agent: C# (.NET 8, Console Application, Windows only)
 - Server: ASP.NET Core 8 (Minimal APIs)
 - Database: SQLite (Microsoft.Data.Sqlite)
 - UI: Vanilla HTML/CSS/JS with Chart.js
@@ -50,7 +48,7 @@ See `docs/setup/dev-environment.md`.
 # Terminal 1 - Start server
 ./scripts/start-server.sh
 
-# Terminal 2 - Start agent (optional)
+# Terminal 2 - Start agent (Windows, run as Administrator)
 ./scripts/start-agent.sh
 
 # Open UI
@@ -58,7 +56,7 @@ See `docs/setup/dev-environment.md`.
 ```
 
 ## Documentation
-- Component READMEs: `server/README.md`
+- Component READMEs: `server/README.md`, `agent/README.md`
 - Decisions: `docs/decisions/`
 - Setup: `docs/setup/`
 - Diagrams: `docs/diagrams/`
