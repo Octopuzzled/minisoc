@@ -21,8 +21,9 @@ if (intervalSeconds == 0) intervalSeconds = 30;
 var channels = config.GetSection("Agent:Channels").Get<string[]>();
 var levels = config.GetSection("Agent:Levels").Get<string[]>();
 
-// Create event source (dummy for development; replace with WindowsEventLogSource for production)
-    var source = new WindowsEventLogSource(channels ?? [], levels ?? []);
+// Create event source 
+    var bookmarkPath = Path.Combine(AppContext.BaseDirectory, "bookmark.xml");
+    var source = new WindowsEventLogSource(channels ?? [], levels ?? [], bookmarkPath);
     Console.WriteLine("✓ Event source initialized (WindowsEventLogSource)");
 
 // Create sender using configured server URL
