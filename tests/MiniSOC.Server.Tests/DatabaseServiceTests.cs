@@ -40,6 +40,7 @@ public class DatabaseServiceTests
 
         // Cleanup
         connection.Close();
+        SqliteConnection.ClearAllPools(); 
         File.Delete("test_events.db");
     }
 }

@@ -59,6 +59,8 @@ public class EventPersistenceTests
         Assert.Equal("Test message", reader.GetString(3));
         
         // Cleanup: Remove test database
+        connection.Close();
+        SqliteConnection.ClearAllPools(); 
         File.Delete(testDbPath);
     }
 
@@ -108,6 +110,8 @@ public class EventPersistenceTests
         Assert.Equal(1, count);
         
         // Cleanup: Remove test database
+        connection.Close();
+        SqliteConnection.ClearAllPools();
         File.Delete(testDbPath);
     }
 }

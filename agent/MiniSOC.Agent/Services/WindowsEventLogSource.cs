@@ -1,6 +1,7 @@
 using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
 using MiniSOC.Agent.Models;
+using MiniSOC.Agent.Extensions;
 
 namespace MiniSOC.Agent.Services;
 
@@ -58,7 +59,7 @@ public class WindowsEventLogSource : IEventSource
             #pragma warning disable CA1416
             while ((record = reader.ReadEvent()) != null)
             {
-                var timestamp = record.TimeCreated?.ToString("o") ?? DateTime.UtcNow.ToString("o");
+                var timestamp = record.TimeCreated.ToSiemTimestamp();
                 var host = record.MachineName;
                 var provider = record.ProviderName;
                 var logName = record.LogName;

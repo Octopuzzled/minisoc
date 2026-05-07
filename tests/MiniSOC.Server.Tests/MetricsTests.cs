@@ -14,6 +14,7 @@ public class MetricsTests
     {
         // Arrange: Create test database with diverse events
         var testDbPath = "test_metrics.db";
+        SqliteConnection.ClearAllPools();
         if (File.Exists(testDbPath))
             File.Delete(testDbPath);
         
@@ -67,6 +68,7 @@ public class MetricsTests
         Assert.Equal(1, hosts["PC-2"]);
 
         // Cleanup
+        SqliteConnection.ClearAllPools();
         File.Delete(testDbPath);
     }
 
@@ -75,6 +77,7 @@ public class MetricsTests
     {
         // Arrange: Create test database with diverse events
         var testDbPath = "test_metrics_24h.db";
+        SqliteConnection.ClearAllPools();
         if (File.Exists(testDbPath))
             File.Delete(testDbPath);
         
@@ -129,6 +132,10 @@ public class MetricsTests
         var expectedHour2 = new DateTime(now.Year, now.Month, now.Day, now.Hour, 0, 0, DateTimeKind.Utc).AddHours(-3);
         var bucket2 = events.First(b => b.Time == expectedHour2);
         Assert.Equal(1, bucket2.Count);
+
+        // Cleanup
+        SqliteConnection.ClearAllPools();
+        File.Delete(testDbPath);
     }
 
     [Fact]
@@ -136,6 +143,7 @@ public class MetricsTests
     {
         // Arrange: Create test database with diverse events
         var testDbPath = "test_metrics_7d.db";
+        SqliteConnection.ClearAllPools();
         if (File.Exists(testDbPath))
             File.Delete(testDbPath);
         
@@ -168,5 +176,9 @@ public class MetricsTests
         var expectedDay = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, DateTimeKind.Utc).AddDays(-1);
         var bucket = events.First(b => b.Time == expectedDay);
         Assert.Equal(1, bucket.Count);
+
+        // Cleanup
+        SqliteConnection.ClearAllPools();
+        File.Delete(testDbPath);
     }
 }
