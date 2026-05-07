@@ -18,6 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("filter-btn").click();
         }
     });
+
+    // Automatic page reload without filter reset
+    setInterval(() => {
+        const level = document.getElementById("levels").value;
+        const provider = document.getElementById("provider").value;
+        const timestart = document.getElementById("timestart").value;
+        const timeend = document.getElementById("timeend").value;
+        loadEvents(level, provider, timestart, timeend);
+    }, 30000); // alle 30 Sekunden
 });
 
 // Fetches events from the API with optional filters and renders them in the table
