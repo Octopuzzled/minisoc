@@ -49,6 +49,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigins");
 
+// Serve static files (web UI)
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+
 // Register endpoints
 app.MapHealthEndpoints();
 app.MapIngestEndpoints();
