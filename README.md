@@ -35,11 +35,12 @@ See `docs/diagrams/architecture.md` for a detailed diagram.
 - UI: Vanilla HTML/CSS/JS with Chart.js
 
 ## Repository Structure
-- `agent/`   Windows agent (C#)
-- `server/`  API + persistence
-- `web/`     Dashboard UI
-- `docs/`    Documentation
-- `scripts/` Helper scripts
+- `agent/`       Windows agent (C#)
+- `server/`      API + persistence
+- `web/`         Dashboard UI
+- `tests/`       Unit and integration tests
+- `docs/`        Documentation
+- `scripts/`     Helper scripts
 
 ## Getting Started
 See `docs/setup/dev-environment.md`.
@@ -53,16 +54,3 @@ See `docs/setup/dev-environment.md`.
 
 # Open UI
 # Open web/index.html with Live Server in VS Code
-```
-
-## Documentation
-- Component READMEs: `server/README.md`, `agent/README.md`
-- Decisions: `docs/decisions/`
-- Setup: `docs/setup/`
-- Diagrams: `docs/diagrams/`
-- API contract: `docs/api-contract-v0.1.md`
-- Event schema: `docs/event-schema-v0.1.md`
-- Backlog: `docs/backlog.md`
-
-## License
-MIT

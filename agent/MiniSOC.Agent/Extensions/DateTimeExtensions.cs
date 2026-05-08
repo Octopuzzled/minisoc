@@ -2,9 +2,9 @@ namespace MiniSOC.Agent.Extensions;
 
 public static class DateTimeExtensions
 {
-    /// <summary>
-    /// Normalisiert ein Datum zu UTC und formatiert es für das SIEM (ISO 8601 mit Z-Suffix).
-    /// </summary>
+/// <summary>
+/// Normalizes a DateTime to UTC and formats it for SIEM (ISO 8601 with Z suffix).
+/// </summary>
     public static string ToSiemTimestamp(this DateTime? dt)
     {
         DateTime utcDate = dt?.ToUniversalTime() ?? DateTime.UtcNow;

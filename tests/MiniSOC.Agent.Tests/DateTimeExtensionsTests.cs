@@ -1,26 +1,28 @@
-using Xunit;
 using MiniSOC.Agent.Extensions;
 using System;
 
 namespace MiniSOC.Agent.Tests;
 
+/// <summary>
+/// Tests for DateTime extension methods used in event timestamp normalization.
+/// </summary>
 public class DateTimeExtensionsTests
 {
     [Fact]
     public void ToSiemTimestamp_NormalizesToUtcWithZ()
     {
-        // Arrange: Ein lokales Datum mit festem Versatz (z.B. 14:00 Uhr)
-        // Wir simulieren eine Zeit, die nicht UTC ist
+        // Arrange: A local date with fixed offset (e.g. 14:00)
+        // We simulate a time that is not UTC
         DateTime? localTime = new DateTime(2026, 5, 7, 14, 0, 0, DateTimeKind.Local);
 
         // Act
         var result = localTime.ToSiemTimestamp();
 
         // Assert
-        // 1. Prüfen, ob das Z am Ende steht (Akzeptanzkriterium #48)
+        // 1. Verify the Z suffix is present (acceptance criterion #48)
         Assert.EndsWith("Z", result);
         
-        // 2. Prüfen, ob das Format ISO-8601 entspricht (yyyy-MM-ddTHH:mm:ss...)
+        // 2. Verify the format matches ISO-8601 (yyyy-MM-ddTHH:mm:ss...)
         Assert.Matches(@"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}", result);
     }
 
@@ -35,7 +37,7 @@ public class DateTimeExtensionsTests
 
         // Assert
         Assert.EndsWith("Z", result);
-        // Prüfen, ob das Jahr aktuell ist, um zu sehen, ob DateTime.UtcNow gegriffen hat
+        // Verify the year is current to confirm DateTime.UtcNow was used
         Assert.Contains(DateTime.UtcNow.Year.ToString(), result);
     }
 }
