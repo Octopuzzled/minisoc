@@ -1,4 +1,3 @@
-```markdown
 # MiniSOC Server
 
 REST API for the MiniSOC log collection platform.
@@ -139,8 +138,7 @@ Returns aggregated event statistics.
 
 ### Run tests
 ```bash
-cd server/MiniSOC.Server.Tests
-dotnet test
+dotnet test tests/MiniSOC.Server.Tests
 ```
 
 ### Project Structure
@@ -165,14 +163,9 @@ server/
 │       ├── SqliteDatabaseService.cs  # SQLite implementation
 │       ├── IMetricsService.cs        # Metrics interface
 │       └── SqliteMetricsService.cs   # SQLite metrics implementation
-└── MiniSOC.Server.Tests/
-    ├── DatabaseServiceTests.cs
-    ├── EventPersistenceTests.cs
-    ├── EventRetrievalTests.cs
-    ├── HealthEndpointTests.cs
-    ├── IngestEndpointTests.cs
-    └── MetricsTests.cs
 ```
+
+Tests are located in `tests/MiniSOC.Server.Tests/` (see `docs/testing.md` for details).
 
 ## Technology Stack
 - ASP.NET Core 8 (Minimal APIs)
@@ -184,5 +177,5 @@ server/
 Events follow schema v0.1 as defined in `docs/event-schema-v0.1.md`.
 
 ## Next Steps
-See `docs/backlog.md` for planned features (Milestone 7: Polish, Milestone 8: Agent & Real Events).
+See `docs/backlog.md` for planned features.
 ```

@@ -27,6 +27,7 @@ dotnet run
 **Note:** On Windows, run as Administrator to access the Security event log channel.
 
 **Expected output:**
+```
 MiniSOC Agent starting...
 ✓ Event source initialized (WindowsEventLogSource)
 ✓ Collected 5591 event(s)
@@ -35,6 +36,7 @@ Sending 5591 event(s) to http://localhost:5152/ingest...
 ✓ Events sent successfully. Server response: {"accepted":5591,"rejected":0,"errors":[]}
 ========================================
 ✓ Agent completed successfully
+```
 
 ### Build only (without running)
 
@@ -76,18 +78,23 @@ Result
 ### Clean Architecture with Interfaces
 
 The agent uses interface-based design for flexibility and testability:
-Models/
-├─ Event.cs                    # Event schema (matches server schema v0.1)
-└─ EventLevel.cs               # Severity enum
-Services/
-├─ IEventSource.cs             # Interface for event collection
-├─ DummyEventSource.cs         # Development implementation (Linux)
-└─ WindowsEventLogSource.cs    # Production implementation (Windows only)
-Clients/
-├─ IEventSender.cs             # Interface for event transmission
-└─ HttpEventSender.cs          # HTTP POST implementation
-Program.cs                       # Main entry point, wires everything together
-appsettings.json                 # Configuration file
+```
+agent/MiniSOC.Agent/
+├── Models/
+│   ├── Event.cs                    # Event schema (matches server schema v0.1)
+│   └── EventLevel.cs               # Severity enum
+├── Services/
+│   ├── IEventSource.cs             # Interface for event collection
+│   ├── DummyEventSource.cs         # Development implementation (Linux)
+│   └── WindowsEventLogSource.cs    # Production implementation (Windows only)
+├── Clients/
+│   ├── IEventSender.cs             # Interface for event transmission
+│   └── HttpEventSender.cs          # HTTP POST implementation
+├── Extensions/
+│   └── DateTimeExtensions.cs       # Timestamp formatting
+├── Program.cs                       # Main entry point, wires everything together
+└── appsettings.json                 # Configuration file
+```
 
 ### Why Interfaces?
 
@@ -143,6 +150,11 @@ Events follow **schema v0.1** as defined in `docs/event-schema-v0.1.md`.
 
 ## Development
 
+### Run tests
+```bash
+dotnet test tests/MiniSOC.Agent.Tests
+```
+
 ### Adding a New Event Source
 
 1. Create a class implementing `IEventSource`:
@@ -166,8 +178,10 @@ var source = new MyEventSource();
 ### Testing Without Server
 
 The agent will report connection errors but won't crash:
+```
 ✗ Network error: No connection could be made because the target machine actively refused it
 Make sure the server is running on the configured URL.
+```
 
 Exit code will be `1` (failure) for scripting/automation.
 
@@ -181,4 +195,4 @@ Exit code will be `1` (failure) for scripting/automation.
 
 ## Next Steps
 
-See `docs/backlog.md` for planned features.
+See `docs/backlog.md` for planned features. For testing details, see `docs/testing.md`.

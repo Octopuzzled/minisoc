@@ -5,6 +5,7 @@
 A task is "Done" when:
 
 - Code builds/runs (if code changes exist)
+- Unit tests added and passing (see `docs/testing.md`)
 - Basic manual test performed and noted in the ticket/commit message
 - Docs updated if behavior/usage changed
 - No secrets committed
@@ -19,6 +20,7 @@ Use prefixes like:
 - docs: documentation only
 - chore: tooling/structure
 - refactor: code restructure without behavior change
+- test: test additions or modifications
 
 ## Branch naming
 Use prefixes matching the commit type:
@@ -27,8 +29,9 @@ Use prefixes matching the commit type:
 - `docs/` — documentation only
 - `chore/` — tooling/structure/cleanup
 - `refactor/` — code restructure without behavior change
+- `test/` — test additions
 
-Examples: `feat/provider-filter`, `fix/known-issues`, `docs/adr-0005`
+Examples: `feat/provider-filter`, `fix/known-issues`, `docs/adr-0005`, `test/agent-sources`
 
 ## Issue structure (from Milestone 5)
 
@@ -43,6 +46,7 @@ What should be built? Include response structure / examples where relevant.
 **Acceptance criteria**
 
 - [ ] Testable, specific criteria
+- [ ] Tests added or updated
 
 **Notes**
 Links to ADRs, design decisions, dependencies on other issues.
